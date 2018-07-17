@@ -1,0 +1,19 @@
+---
+# Set the main git webwork repo here and the branch you would like to use
+#
+# I use a private CodeCommit repository to make sure the state of our webwork versions is stable. 
+# Our EC2 instances have a role that allows them to pull from CodeCommit.
+# You could use the main WeBWorK Github repository if you'd like, though you would want to use a specific
+# commit pointer instead of a branch to guarantee each deployment is the same.
+webwork_repo: https://git-codecommit.us-west-2.amazonaws.com/v1/repos/your_webwork_repo
+webwork_git_branch: master
+
+# Set the main pg repo here and the branch you would like to use. Same caveat as setting the WW repo above
+pg_repo: https://git-codecommit.us-west-2.amazonaws.com/v1/repos/your_pg_repo
+pg_git_branch: master
+
+mathjax_repo: https://github.com/mathjax/MathJax.git
+mathjax_git_branch: master
+
+OPL_repo: https://github.com/openwebwork/webwork-open-problem-library.git
+OPL_git_branch: master

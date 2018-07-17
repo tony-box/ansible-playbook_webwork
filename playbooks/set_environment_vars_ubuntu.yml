@@ -1,0 +1,17 @@
+---
+- name: Set Webwork Environment Variables
+  hosts: all
+  become: yes
+
+  tasks:    
+    - name: set WW environment variables
+      blockinfile:
+        path: /root/.bashrc
+        block: |
+          export PATH=$PATH:{{ env_webwork_bin_path }}
+          export WEBWORK_ROOT={{ env_webwork_root_path }}
+          export PG_ROOT={{ env_webwork_pg_path }}
+        state: present
+
+    - name: reload environment variables
+      shell: sudo bash

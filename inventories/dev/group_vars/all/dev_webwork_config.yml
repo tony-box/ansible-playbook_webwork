@@ -1,0 +1,40 @@
+---
+  # Recommendation is to keep these default
+  env_webwork_installation_path: /opt/webwork
+  env_webwork_bin_path: /opt/webwork/webwork2/bin
+  env_webwork_root_path: /opt/webwork/webwork2
+  env_webwork_pg_path: /opt/webwork/pg
+    
+  # Set the webwork admin user's password
+  webwork_admin_password: adminpassword
+    
+  # Keep URL /webwork2 or things will break!
+  site_webwork_url: /webwork2
+  
+  site_server_root_url: https://www.mywebworksite.com
+  
+  # Keep these www-data if using Ubuntu/Apache
+  site_server_userID: www-data
+  site_server_groupID: www-data
+
+  site_webwork_server_admin_email: admin@mywebworksite.com
+
+  # The endpoint for your database. Must include dbi:*databasedriver*:*databasename*:*endpoint* (can be localhost or a remote server)
+  site_database_dsn: dbi:mysql:webwork_db:localhost
+  site_database_storage_engine: innodb
+  site_database_username: your_ww_db_username
+  site_database_password: your_ww_db_password
+  site_smtpServer: mail.test.com
+  site_smtpSender: noreply@webworksite.com
+  site_smtpPort: 25
+  site_siteDefaultTimezone: "America/Los_Angeles"
+
+  # If you have an Rserver, enter the IP address to it here. If it's local, use localhost
+  local_Rserver: localhost
+
+  # If you are using LDAP for authentication, enter the proper configs here
+  ldap_host1: ldaps://ldap.mysite.com
+  ldap_base: dc=mysite,dc=com
+  ldap_bindAccount: 1
+  ldap_searchDN: cn=binduser,ou=Users,dc=mysite,dc=com
+  ldap_bindPassword: binduser_password

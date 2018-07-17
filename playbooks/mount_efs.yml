@@ -1,0 +1,36 @@
+---
+- name: Mount EFS target
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: mounting efs
+      mount:
+        boot: yes
+        path: "{{ efs_mount_dir }}"
+        src: "{{ efs_file_system_src }}"
+        fstype: nfs4
+        opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
+        state: mounted      
+ 
+    - name: create shared mount directories 1/4
+      file:
+        path: '{{ efs_mount_dir }}/courses'
+        state: directory
+    
+    - name: create shared mount directories 2/4
+      file:
+        path: '{{ efs_mount_dir }}/DATA'
+        state: directory
+    
+    - name: create shared mount directories 3/4
+      file:
+        path: '{{ efs_mount_dir }}/logs'
+        state: directory
+    
+    - name: create shared mount directories 4/4
+      file:
+        path: '{{ efs_mount_dir }}/tmp'
+        state: directory
+
+

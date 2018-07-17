@@ -1,0 +1,21 @@
+---
+- name: Setup admin course and reset admin user password
+  hosts: all
+  become: true
+    
+  tasks:
+    
+    - name: create Admin course
+      shell: cd /opt/webwork/courses && /usr/bin/perl {{ env_webwork_root_path }}/bin/addcourse admin --db-layout=sql_single --users=adminClasslist.lst --professors=admin
+      environment:
+          PATH: "{{ env_webwork_bin_path }}"
+          WEBWORK_ROOT: "{{ env_webwork_root_path }}"
+          PG_ROOT: "{{ env_webwork_pg_path }}"
+
+    - name: set WW Admin password in Admin course
+      shell: /usr/bin/perl {{ env_webwork_root_path }}/bin/newpassword admin admin {{ webwork_admin_password }}
+      environment:
+          PATH: "{{ env_webwork_bin_path }}"
+          WEBWORK_ROOT: "{{ env_webwork_root_path }}"
+          PG_ROOT: "{{ env_webwork_pg_path }}"
+

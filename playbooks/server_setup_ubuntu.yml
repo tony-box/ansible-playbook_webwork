@@ -1,0 +1,388 @@
+---
+- name: Install latest software packages for Webwork dependencies
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: update and upgrade all apt packages
+      apt:
+        upgrade: dist
+        update_cache: yes
+
+    - name: install awscli
+      apt:
+        name: awscli
+        state: latest
+
+    - name: install nfs-common
+      apt:
+        name: nfs-common
+        state: latest
+
+    - name: install gcc
+      apt:
+        name: gcc
+        state: latest
+
+    - name: install make
+      apt:
+        name: make
+        state: latest
+    
+    - name: install tar
+      apt:
+        name: tar
+        state: latest
+
+    - name: install gzip
+      apt:
+        name: gzip
+        state: latest
+    
+    - name: install unzip
+      apt:
+        name: unzip
+        state: latest
+    
+    - name: install dvipng
+      apt:
+        name: dvipng
+        state: latest
+    
+    - name: install curl
+      apt:
+        name: curl
+        state: latest
+    
+    - name: install perl
+      apt:
+        name: perl
+        state: latest
+
+    - name: install netpbm
+      apt:
+        name: netpbm
+        state: latest
+
+    - name: install git
+      apt:
+        name: git
+        state: latest
+
+    - name: install cpanminus
+      apt:
+        name: cpanminus
+        state: latest
+
+    - name: install mysql-client
+      apt:
+        name: mysql-client
+        state: latest
+
+    - name: Install apache
+      apt:
+        name: apache2
+        state: latest
+  
+    - name: install libapache2-mod-fcgid
+      apt:
+        name: libapache2-mod-fcgid
+        state: latest
+
+    - name: install libapache2-mod-perl2
+      apt:
+        name: libapache2-mod-perl2
+        state: latest
+
+    - name: install libapache2-mod-apreq2
+      apt:
+        name: libapache2-mod-apreq2
+        state: latest
+
+    - name: install preview-latex-style
+      apt:
+        name: preview-latex-style
+        state: latest
+    
+    - name: install texlive-latex-base
+      apt:
+        name: texlive-latex-base
+        state: latest
+    
+    - name: install texlive-latex-recommended
+      apt:
+        name: texlive-latex-recommended
+        state: latest
+    
+    - name: install texlive-latex-extra
+      apt:
+        name: texlive-latex-extra
+        state: latest
+
+    - name: install texlive-fonts-recommended
+      apt:
+        name: texlive-fonts-recommended
+        state: latest
+
+    - name: install libapache2-request-perl
+      apt:
+        name: libapache2-request-perl
+        state: latest    
+
+    - name: install libapache2-mod-perl2
+      apt:
+        name: libapache2-mod-perl2
+        state: latest
+
+    - name: install Array::Utils via CPAN
+      cpanm:
+        name: Array::Utils
+
+    - name: install perl-modules
+      apt:
+        name: perl-modules
+        state: latest
+
+    - name: install perl-base
+      apt:
+        name: perl-base
+        state: latest
+
+    - name: install libcrypt-ssleay-perl
+      apt:
+        name: libcrypt-ssleay-perl
+        state: latest
+
+    - name: install libdancer-perl
+      apt:
+        name: libdancer-perl
+        state: latest
+
+    - name: install libdancer-plugin-database-perl
+      apt:
+        name: libdancer-plugin-database-perl
+        state: latest
+
+    - name: install libossp-uuid-perl
+      apt:
+        name: libossp-uuid-perl
+        state: latest
+
+    - name: install libtimedate-perl
+      apt:
+        name: libtimedate-perl
+        state: latest
+
+    - name: install libdatetime-perl
+      apt:
+        name: libdatetime-perl
+        state: latest
+
+    - name: install libdbd-mysql-perl
+      apt:
+        name: libdbd-mysql-perl
+        state: latest
+
+    - name: install libdbi-perl
+      apt:
+        name: libdbi-perl
+        state: latest
+
+    - name: install libemail-address-perl
+      apt:
+        name: libemail-address-perl
+        state: latest
+
+    - name: install libexception-class-perl
+      apt:
+        name: libexception-class-perl
+        state: latest
+
+    - name: install libextutils-xsbuilder-perl
+      apt:
+        name: libextutils-xsbuilder-perl
+        state: latest
+
+    - name: install libfile-find-rule-perl
+      apt:
+        name: libfile-find-rule-perl
+        state: latest
+
+    - name: install libgd-gd2-perl
+      apt:
+        name: libgd-gd2-perl
+        state: latest
+
+    - name: install libhtml-parser-perl
+      apt:
+        name: libhtml-parser-perl
+        state: latest
+
+    - name: install libhtml-scrubber-perl
+      apt:
+        name: libhtml-scrubber-perl
+        state: latest
+    
+    - name: install libhtml-tagset-perl
+      apt:
+        name: libhtml-tagset-perl
+        state: latest
+
+    - name: install libhtml-template-perl
+      apt:
+        name: libhtml-template-perl
+        state: latest
+
+    - name: install libio-file-withpath-perl
+      apt:
+        name: libio-file-withpath-perl
+        state: latest
+
+    - name: install Iterator via CPAN 
+      cpanm:
+        name: Iterator
+
+    - name: install Iterator::Util via CPAN
+      cpanm:
+        name: Iterator::Util
+
+    - name: install libjson-perl
+      apt:
+        name: libjson-perl
+        state: latest
+
+    - name: install libemail-simple-perl
+      apt:
+        name: libemail-simple-perl
+        state: latest
+
+    - name: install libemail-sender-perl
+      apt:
+        name: libemail-sender-perl
+        state: latest
+
+    - name: install liblocale-maketext-lexicon-perl
+      apt:
+        name: liblocale-maketext-lexicon-perl
+        state: latest
+
+    - name: install liblwp-protocol-https-perl
+      apt:
+        name: liblwp-protocol-https-perl
+        state: latest
+
+    - name: install Mail::Sender via CPAN
+      cpanm:
+        name: Mail::Sender 
+
+    - name: install libmime-tools-perl
+      apt:
+        name: libmime-tools-perl
+        state: latest
+    
+    - name: install libnet-ip-perl
+      apt:
+        name: libnet-ip-perl
+        state: latest
+
+    - name: install libnet-ldap-perl
+      apt:
+        name: libnet-ldap-perl
+        state: latest
+
+    - name: install libnet-oauth-perl
+      apt:
+        name: libnet-oauth-perl
+        state: latest
+
+    - name: install libpadwalker-perl
+      apt:
+        name: libpadwalker-perl
+        state: latest
+
+    - name: install Path::Class via CPAN
+      cpanm:
+        name: Path::Class
+
+    - name: install Data::Dump via CPAN
+      cpanm:
+        name: Data::Dump
+
+    - name: install libphp-serialization-perl
+      apt:
+        name: libphp-serialization-perl
+        state: latest
+    
+    - name: install libpod-wsdl-perl
+      apt:
+        name: libpod-wsdl-perl
+        state: latest
+    
+    - name: install libsoap-lite-perl
+      apt:
+        name: libsoap-lite-perl
+        state: latest
+
+    - name: install libsql-abstract-perl
+      apt:
+        name: libsql-abstract-perl
+        state: latest
+
+    - name: install libstring-shellquote-perl
+      apt:
+        name: libstring-shellquote-perl
+        state: latest
+
+    - name: install libtemplate-perl
+      apt:
+        name: libtemplate-perl
+        state: latest
+   
+    - name: install libtext-csv-perl
+      apt:
+        name: libtext-csv-perl
+        state: latest
+    
+    - name: install libtie-ixhash-perl
+      apt:
+        name: libtie-ixhash-perl
+        state: latest
+    
+    - name: install liburi-perl
+      apt:
+        name: liburi-perl
+        state: latest
+
+    - name: install libuuid-tiny-perl
+      apt:
+        name: libuuid-tiny-perl
+        state: latest
+
+    - name: install libxml-parser-perl
+      apt:
+        name: libxml-parser-perl
+        state: latest
+
+    - name: install XML::Parser::EasyTree via CPAN
+      cpanm:
+        name: XML::Parser::EasyTree
+
+    - name: install libxml-writer-perl
+      apt:
+        name: libxml-writer-perl
+        state: latest
+    
+    - name: install libyaml-perl
+      apt:
+        name: libyaml-perl
+        state: latest
+
+    - name: install Statistics::R::IO via CPAN
+      cpanm:
+        name: Statistics::R::IO
+   
+    - name: Restart apache2
+      service:
+        name: apache2
+        state: reloaded
+        enabled: yes

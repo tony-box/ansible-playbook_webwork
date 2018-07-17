@@ -1,0 +1,133 @@
+---
+- name: Setup Webwork Dev server
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Set up CodeCommit credential helper 1/2
+      git_config:
+        name: credential.helper
+        scope: global
+        value: '!aws codecommit credential-helper $@'
+
+    - name: Set up Credential helper 2/2
+      git_config:
+        name: credential.UseHttpPath
+        scope: global
+        value: true
+
+    - name: clean out temp repo directories
+      file: 
+        state: absent
+        path: /var/build/webwork
+
+    - name: make clean temp directories for repos
+      file: 
+        path: /var/build/webwork
+        state: directory
+
+    - name: clone "{{ webwork_repo }}" from codecommit to temp dir
+      git:
+        repo: "{{ webwork_repo }}" 
+        dest: /var/build/webwork/webwork2
+        version: "{{ webwork_git_branch }}"
+        depth: 1
+
+    - name: clone "{{ pg_repo }}" from codecommit to temp dir
+      git:
+        repo: "{{ pg_repo }}" 
+        dest: /var/build/webwork/pg
+        version: "{{ pg_git_branch }}"
+        depth: 1
+
+    - name: clone "{{ mathjax_repo }}" from codecommit to temp dir
+      git:
+        repo: "{{ mathjax_repo }}" 
+        dest: /var/build/webwork/MathJax
+        version: "{{ mathjax_git_branch }}"
+        depth: 1
+          
+    - name: create sym link to webwork courses EFS directory
+      file:
+        src: "{{ efs_mount_dir }}/courses"
+        dest: /var/build/webwork/courses
+        owner: "{{ site_server_userID }}"
+        group: "{{ site_server_groupID }}"
+        state: link
+        force: yes
+   
+    - name: copy courses.dist into /var/build/webwork/courses/ directory
+      shell: cp -Rf /var/build/webwork/webwork2/courses.dist/* /var/build/webwork/courses/
+
+    - name: create sym link to modelCourse
+      file:
+        src: "{{ env_webwork_installation_path }}/libraries/OpenProblemLibrary"
+        dest: /var/build/webwork/courses/modelCourse/templates/Library
+        owner: "{{ site_server_userID }}"
+        group: "{{ site_server_groupID }}"
+        state: link
+        force: yes
+    
+    - name: move contents of dist DATA dir to mount DATA dir
+      shell: cp -Rf /var/build/webwork/webwork2/DATA/* {{ efs_mount_dir }}/DATA
+
+    - name: remove dist DATA dir in prep for symlink
+      file:
+        path: /var/build/webwork/webwork2/DATA
+        state: absent
+
+    - name: create sym link to webwork DATA EFS directory
+      file:
+        src: "{{ efs_mount_dir }}/DATA"
+        dest: /var/build/webwork/webwork2/DATA
+        owner: "{{ site_server_userID }}"
+        group: "{{ site_server_groupID }}"
+        state: link
+        force: yes
+
+    - name: move contents of dist logs dir to mount logs dir
+      shell: cp -Rf /var/build/webwork/webwork2/logs/* {{ efs_mount_dir }}/logs
+
+    - name: remove dist logs dir in prep for symlink
+      file:
+        path: /var/build/webwork/webwork2/logs
+        state: absent
+
+    - name: create sym link to webwork logs EFS directory
+      file:
+        src: "{{ efs_mount_dir }}/logs"
+        dest: /var/build/webwork/webwork2/logs
+        owner: "{{ site_server_userID }}"
+        group: "{{ site_server_groupID }}"
+        state: link
+        force: yes
+
+    - name: move contents of dist tmp dir to mount tmp dir
+      shell: cp -Rf /var/build/webwork/webwork2/tmp/* {{ efs_mount_dir }}/tmp
+
+    - name: remove dist tmp dir in prep for symlink
+      file:
+        path: /var/build/webwork/webwork2/tmp
+        state: absent
+    
+    - name: create sym link to webwork tmp EFS directory
+      file:
+        src: "{{ efs_mount_dir }}/tmp"
+        dest: /var/build/webwork/webwork2/tmp
+        owner: "{{ site_server_userID }}"
+        group: "{{ site_server_groupID }}"
+        state: link
+        force: yes
+    
+    - name: clean out previous webwork directory {{ env_webwork_installation_path }}
+      file:
+        state: absent
+        path: "{{ env_webwork_installation_path }}"
+
+    - name: ensure existing webwork installation directory
+      file:
+        path: "{{ env_webwork_installation_path }}"
+        state: directory
+
+    - name: move temp webwork directory to /opt/
+      shell: mv /var/build/webwork/* {{ env_webwork_installation_path }}

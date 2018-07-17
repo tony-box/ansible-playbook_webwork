@@ -1,0 +1,11 @@
+---
+- name: Complete setup of additional Webwork features and set permissions
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Compile color.c
+      shell: cd {{ env_webwork_pg_path }}/lib/chromatic/ && gcc color.c
+
+    - name: ensure correct file permissions for Apache
+      shell: chown -R {{ site_server_userID }}:{{ site_server_groupID }} {{ efs_mount_dir }} {{ env_webwork_installation_path }}

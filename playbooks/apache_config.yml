@@ -1,0 +1,66 @@
+---
+- name: Add custom apache configuration files
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: enable mod_rewrite using symlink
+      file:
+        src: /etc/apache2/mods-available/rewrite.load
+        dest: /etc/apache2/mods-enabled/rewrite.load
+        state: link    
+
+    - name: create https.conf file
+      blockinfile:
+        path: /etc/apache2/conf-available/https.conf
+        create: yes
+        state: present
+        block: |
+          RewriteEngine On
+          RewriteCond %{HTTP:X-Forwarded-Proto} ^http$
+          RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+    
+    - name: enable https.conf
+      file:
+        src: /etc/apache2/conf-available/https.conf
+        dest: /etc/apache2/conf-enabled/https.conf
+        state: link
+
+    ##
+    # mpm_event must be disabled for mpm_prefork to work
+    ##
+    - name: disable mpm_event 1/2
+      file:
+        path: /etc/apache2/mods-enabled/mpm_event.conf
+        state: absent
+
+    - name: disable mpm_event 2/2
+      file:
+        path: /etc/apache2/mods-enabled/mpm_event.load
+        state: absent
+   
+    - name: enable mpm_prefork using symlink 1/2
+      file:
+        src: /etc/apache2/mods-available/mpm_prefork.conf
+        dest: /etc/apache2/mods-enabled/mpm_prefork.conf
+        state: link
+
+    - name: enable mpm_prefork using symlink 2/2
+      file:
+        src: /etc/apache2/mods-available/mpm_prefork.load
+        dest: /etc/apache2/mods-enabled/mpm_prefork.load
+        state: link
+
+#TODO: Create this section!
+#    - name: set options for apache prefork
+#     - file: 
+
+      notify:
+        - restart apache2
+
+  handlers:
+    - name: restart apache2
+      service:
+        name: apache2
+        state: restarted

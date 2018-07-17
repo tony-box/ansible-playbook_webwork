@@ -1,0 +1,27 @@
+---
+- name: Download and install the latest OPL
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: ensure OPL directory exists
+      file:
+        path: /opt/webwork/libraries
+        state: directory
+        owner: "{{ site_server_userID }}"
+        group: "{{ site_server_groupID }}"
+
+    - name: download the latest OPL from git
+      git: 
+        repo: "{{ OPL_repo }}"
+        dest: "{{ env_webwork_installation_path }}/libraries"
+        version: "{{ OPL_git_branch }}"
+        depth: 1
+
+    - name: Run the OPL update script !! This will take a while !!
+      shell: /usr/bin/perl {{ env_webwork_root_path }}/bin/OPL-update
+      environment:
+          PATH: "{{ env_webwork_bin_path }}"
+          WEBWORK_ROOT: "{{ env_webwork_root_path }}"
+          PG_ROOT: "{{ env_webwork_pg_path }}"

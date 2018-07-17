@@ -1,0 +1,3 @@
+---
+# Where your NFS drive will be mounted on each webserver
+efs_mount_dir: /mnt/webwork

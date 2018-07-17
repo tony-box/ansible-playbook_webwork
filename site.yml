@@ -1,0 +1,16 @@
+#!/usr/bin/env ansible-playbook
+#
+
+- include: playbooks/set_environment_vars_ubuntu.yml
+- include: playbooks/server_setup_ubuntu.yml
+- include: playbooks/apache_config.yml
+
+# mount must come after apache setup for apache user permissions
+- include: playbooks/mount_efs.yml
+- include: playbooks/webwork_deploy_git.yml
+- include: playbooks/webwork_config.yml
+- include: playbooks/update_OPL.yml
+- include: playbooks/create_admin_course.yml
+
+# ensure this comes last! will set proper file permissions for everything
+- include: playbooks/webwork_finish_setup.yml

@@ -1,0 +1,89 @@
+---
+- name: Set up Webwork configuration files
+  hosts: all
+  become: yes
+  
+  vars:
+    webwork_config_site_webwork_url: "{{ site_webwork_url }}"
+    webwork_config_site_server_root_url: "{{ site_server_root_url }}"
+    webwork_config_site_server_userID: "{{ site_server_userID }}"
+    webwork_config_site_server_groupID: "{{ site_server_groupID }}"
+    webwork_config_site_webwork_server_admin_email: "{{ site_webwork_server_admin_email }}"
+    webwork_config_site_database_dsn: "{{ site_database_dsn }}"
+    webwork_config_site_database_storage_engine: "{{ site_database_storage_engine }}"
+    webwork_config_site_database_username: "{{ site_database_username }}"
+    webwork_config_site_database_password: "{{ site_database_password }}"
+    webwork_config_site_smtpServer: "{{ site_smtpServer }}"
+    webwork_config_site_smtpSender: "{{ site_smtpSender }}"
+    webwork_config_site_smtpPort: "{{ site_smtpPort }}"
+    webwork_config_site_siteDefaultTimezone: "{{ site_siteDefaultTimezone }}"
+
+    webwork_config_local_problemLibraryRoot: "{{ local_problemLibraryRoot }}"
+    webwork_config_local_problemLibraryVersion: "{{ local_problemLibraryVersion }}"
+    webwork_config_local_Rserver: "{{ local_Rserver }}"
+
+    webwork_config_ldap_host1: "{{ ldap_host1 }}"
+    webwork_config_ldap_base: "{{ ldap_base }}"
+    webwork_config_ldap_bindAccount: "{{ ldap_bindAccount }}"
+    webwork_config_ldap_searchDN: "{{ ldap_searchDN }}"
+    webwork_config_ldap_bindPassword: "{{ ldap_bindPassword }}"
+
+    webwork_config_apache2_env_webwork_root_path: "{{ env_webwork_root_path }}"
+
+  tasks:
+    - name: add webwork site.conf
+      template:
+        src: site.conf.j2
+        dest: "{{ env_webwork_root_path }}/conf/site.conf"
+
+    - name: add webwork localOverrides.conf
+      template:
+        src: localOverrides.conf.j2
+        dest: "{{ env_webwork_root_path }}/conf/localOverrides.conf"
+
+    - name: add webwork authen_ldap.conf
+      template:
+        src: authen_ldap.conf.j2
+        dest: "{{ env_webwork_root_path }}/conf/authen_ldap.conf"
+
+    - name: add webwork's apache_webwork.conf file
+      template:
+        src: apache24_webwork.conf.j2
+        dest: /etc/apache2/conf-available/webwork.conf
+
+    - name: enable webwork.conf using symlink
+      file:
+        src: /etc/apache2/conf-available/webwork.conf
+        dest: /etc/apache2/conf-enabled/webwork.conf
+        state: link
+    
+    ##
+    # mpm_event must be disabled for mpm_prefork to work
+    ##
+    - name: disable mpm_event 1/2
+      file:
+        path: /etc/apache2/mods-enabled/mpm_event.conf
+        state: absent
+
+    - name: disable mpm_event 2/2
+      file:
+        path: /etc/apache2/mods-enabled/mpm_event.load
+        state: absent
+   
+    - name: enable mpm_prefork using symlink 1/2
+      file:
+        src: /etc/apache2/mods-available/mpm_prefork.conf
+        dest: /etc/apache2/mods-enabled/mpm_prefork.conf
+        state: link
+
+    - name: enable mpm_prefork using symlink 2/2
+      file:
+        src: /etc/apache2/mods-available/mpm_prefork.load
+        dest: /etc/apache2/mods-enabled/mpm_prefork.load
+        state: link
+
+    - name: restart apache2
+      service:
+        name: apache2
+        state: restarted
+        enabled: yes
