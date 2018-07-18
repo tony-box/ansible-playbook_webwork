@@ -14,3 +14,4 @@ This playbook has been tested on:
 - RDS MySQL Database
 - EFS mount for shared filestorage across servers
 - Dedicated Rserver
+- LDAP Authentication
